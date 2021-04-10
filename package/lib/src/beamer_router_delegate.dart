@@ -59,7 +59,7 @@ class BeamerRouterDelegate<T extends BeamState> extends RouterDelegate<Uri>
     }
     _navigationNotifier = navigationNotifier;
     final location = locationBuilder(createState!(_navigationNotifier!.uri));
-    _beamHistory.add(location..prepare());
+    _beamHistory.add(location);
     _currentBeamLocation = _beamHistory.last;
     _currentBeamLocation.addListener(notify);
     _navigationNotifier!.addListener(setPathFromUriNotifier);
@@ -209,7 +209,7 @@ class BeamerRouterDelegate<T extends BeamState> extends RouterDelegate<Uri>
     if (removeDuplicateHistory) {
       _beamHistory.removeWhere((l) => l.runtimeType == location.runtimeType);
     }
-    _beamHistory.add(location..prepare());
+    _beamHistory.add(location);
     _currentBeamLocation = _beamHistory.last;
     _currentBeamLocation.addListener(notify);
     _update();
@@ -300,8 +300,9 @@ class BeamerRouterDelegate<T extends BeamState> extends RouterDelegate<Uri>
       }
     }
     if ((_currentBeamLocation is NotFound) && notFoundRedirect != null) {
-      _currentBeamLocation = notFoundRedirect!..prepare();
+      _currentBeamLocation = notFoundRedirect!;
     }
+    _currentBeamLocation.executeBefore(context);
     final navigator = Builder(
       builder: (context) {
         _currentPages = _stacked
@@ -312,6 +313,7 @@ class BeamerRouterDelegate<T extends BeamState> extends RouterDelegate<Uri>
                     .pagesBuilder(context, _currentBeamLocation.state)
                     .last
               ];
+        _currentBeamLocation.executeAfter(context, _currentPages);
         return Navigator(
           key: navigatorKey,
           observers: navigatorObservers,
@@ -424,12 +426,12 @@ class BeamerRouterDelegate<T extends BeamState> extends RouterDelegate<Uri>
       _beamHistory.removeLast();
     }
     if (guard.beamTo != null) {
-      _beamHistory.add(guard.beamTo!(context)..prepare());
+      _beamHistory.add(guard.beamTo!(context));
       _currentBeamLocation = _beamHistory.last;
     } else if (guard.beamToNamed != null) {
       final location =
           locationBuilder(createState!(Uri.parse(guard.beamToNamed!)));
-      _beamHistory.add(location..prepare());
+      _beamHistory.add(location);
       _currentBeamLocation = _beamHistory.last;
     }
   }

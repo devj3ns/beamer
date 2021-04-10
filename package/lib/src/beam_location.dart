@@ -40,10 +40,34 @@ abstract class BeamLocation<T extends BeamState> extends ChangeNotifier {
     }
   }
 
+  /// Represents the "form" of URI paths supported by this [BeamLocation].
+  ///
+  /// Dynamic path segments are denoted with ':key' and consequently
+  /// `{'key': <value>}` will be put to [state.pathParameters].
+  ///
+  /// For example: `['/books/:id']`.
+  List<String> get pathBlueprints;
+
+  /// Creates and returns the list of pages to be built by the [Navigator]
+  /// when this [BeamLocation] is beamed to or internally inferred.
+  ///
+  /// `context` can be useful while building the pages.
+  /// It will also contain anything injected via [builder].
+  ///
+  /// `state` is the state of this [BeamLocation], containing by default
+  /// all the URI configuration parameters. See [BeamState].
+  List<BeamPage> pagesBuilder(BuildContext context, T state);
+
+  /// Will be executed before [pagesBuilder].
+  void executeBefore(BuildContext context) => null;
+
+  /// Will be executed after [pagesBuilder].
+  void executeAfter(BuildContext context, List<BeamPage> pages) => null;
+
   /// Gives the ability to wrap the `navigator`.
   ///
   /// Mostly useful for providing something to the entire location,
-  /// i.e. to all of the [pages].
+  /// i.e. to all of the pages.
   ///
   /// For example:
   ///
@@ -58,25 +82,6 @@ abstract class BeamLocation<T extends BeamState> extends ChangeNotifier {
   /// ```
   Widget builder(BuildContext context, Widget navigator) => navigator;
 
-  /// Represents the "form" of URI paths supported by this [BeamLocation].
-  ///
-  /// Optional path segments are denoted with ':xxx' and consequently
-  /// `{'xxx': <real>}` will be put to [pathParameters] by
-  /// [BeamerRouteInformationParser] upon receiving the real path from browser.
-  ///
-  /// Optional path segments can be used as a mean to pass data regardless of
-  /// whether there is a browser.
-  ///
-  /// For example: '/books/:id'.
-  List<String> get pathBlueprints;
-
-  /// Creates and returns the list of pages to be built by the [Navigator]
-  /// when this [BeamLocation] is beamed to or internally inferred.
-  ///
-  /// `context` can be useful while building the pages.
-  /// It will also contain anything injected via [builder].
-  List<BeamPage> pagesBuilder(BuildContext context, T state);
-
   /// Guards that will be executing [check] when this gets beamed to.
   ///
   /// Checks will be executed in order; chain of responsibility pattern.
@@ -86,9 +91,6 @@ abstract class BeamLocation<T extends BeamState> extends ChangeNotifier {
   /// Override this in your subclasses, if needed.
   List<BeamGuard> get guards => const <BeamGuard>[];
 
-  /// Will be executed before [pages] are drawn onto screen.
-  void Function()? executeBefore;
-
   /// A transition delegate to be used by [Navigator].
   ///
   /// This will be used only by this location, unlike
@@ -97,16 +99,6 @@ abstract class BeamLocation<T extends BeamState> extends ChangeNotifier {
   ///
   /// This ransition delegate will override the one in [BeamerRouterDelegate].
   TransitionDelegate? get transitionDelegate => null;
-
-  /// Recreates the [uri] for this [BeamLocation]
-  /// considering current value of [pathParameters] and [queryParameters].
-  ///
-  /// Calls [executeBefore] if defined.
-  void prepare() {
-    //_makePath();
-    //_makeQuery();
-    executeBefore?.call();
-  }
 }
 
 /// Default location to choose if requested URI doesn't parse to any location.
