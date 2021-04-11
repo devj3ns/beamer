@@ -56,7 +56,7 @@ abstract class BeamLocation<T extends BeamState> extends ChangeNotifier {
   ///
   /// `state` is the state of this [BeamLocation], containing by default
   /// all the URI configuration parameters. See [BeamState].
-  List<BeamPage> pagesBuilder(BuildContext context, T state);
+  List<BeamPage> buildPages(BuildContext context, T state);
 
   /// Will be executed before [pagesBuilder].
   void executeBefore(BuildContext context) => null;
@@ -106,7 +106,7 @@ class NotFound extends BeamLocation {
   NotFound({String path = '/'}) : super(BeamState.fromUri(Uri.parse(path)));
 
   @override
-  List<BeamPage> pagesBuilder(BuildContext context, BeamState state) => [];
+  List<BeamPage> buildPages(BuildContext context, BeamState state) => [];
 
   @override
   List<String> get pathBlueprints => [''];

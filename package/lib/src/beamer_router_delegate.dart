@@ -320,11 +320,11 @@ class BeamerRouterDelegate<T extends BeamState> extends RouterDelegate<Uri>
     final navigator = Builder(
       builder: (context) {
         _currentPages = _stacked
-            ? _currentBeamLocation.pagesBuilder(
+            ? _currentBeamLocation.buildPages(
                 context, _currentBeamLocation.state)
             : [
                 _currentBeamLocation
-                    .pagesBuilder(context, _currentBeamLocation.state)
+                    .buildPages(context, _currentBeamLocation.state)
                     .last
               ];
         _currentBeamLocation.executeAfter(context, _currentPages);
@@ -465,7 +465,7 @@ class _RootLocation extends BeamLocation {
   List<String> get pathBlueprints => ['/*'];
 
   @override
-  List<BeamPage> pagesBuilder(BuildContext context, BeamState state) => [
+  List<BeamPage> buildPages(BuildContext context, BeamState state) => [
         BeamPage(
           key: ValueKey('root'),
           child: homeBuilder(context, state),

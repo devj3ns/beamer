@@ -60,7 +60,7 @@ class SimpleBeamLocation extends BeamLocation {
   List<String> get pathBlueprints => [sortedRoutes.last];
 
   @override
-  List<BeamPage> pagesBuilder(BuildContext context, BeamState state) {
+  List<BeamPage> buildPages(BuildContext context, BeamState state) {
     var filteredRoutes = chooseRoutes(state, routes.keys);
     routes.removeWhere((key, value) => !filteredRoutes.containsKey(key));
     return sortedRoutes.map((route) {
