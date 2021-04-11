@@ -1,3 +1,11 @@
+# 1.0.0-pre.2.0
+
+- **BREAKING** rename `Beamer.of(context).currentLocation` to `Beamer.of(context).currentBeamLocation`
+- **BREAKING** rename `pagesBuilder` to `buildPages`
+- **Add** `beamBackTransitionDelegate` to `BeamerRouterDelegate`
+- **Add** `transition_delegates.dart` with some useful transition delegates
+- **Remove** `prepare()` from `BeamLocation`
+
 # 1.0.0-pre.1.0
 
 - merge `v0.11.2`
