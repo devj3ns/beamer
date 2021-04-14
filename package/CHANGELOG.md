@@ -1,3 +1,7 @@
+# 1.0.0-pre.2.1
+
+- **Fix** `currentBeamLocation` without listener after guard beam
+
 # 1.0.0-pre.2.0
 
 - **BREAKING** rename `Beamer.of(context).currentLocation` to `Beamer.of(context).currentBeamLocation`
