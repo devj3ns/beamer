@@ -441,11 +441,13 @@ class BeamerRouterDelegate<T extends BeamState> extends RouterDelegate<Uri>
     if (guard.beamTo != null) {
       _beamHistory.add(guard.beamTo!(context));
       _currentBeamLocation = _beamHistory.last;
+      _currentBeamLocation.addListener(notify);
     } else if (guard.beamToNamed != null) {
       final location =
           locationBuilder(createState!(Uri.parse(guard.beamToNamed!)));
       _beamHistory.add(location);
       _currentBeamLocation = _beamHistory.last;
+      _currentBeamLocation.addListener(notify);
     }
   }
 
