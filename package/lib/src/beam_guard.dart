@@ -54,7 +54,8 @@ class BeamGuard {
   /// If guard [check] returns `false`, build a [BeamLocation] to be beamed to.
   ///
   /// [showPage] has precedence over this attribute.
-  BeamLocation Function(BuildContext context)? beamTo;
+  // todo: Add doc comment.
+  BeamLocation Function(BuildContext context, Uri failedUri)? beamTo;
 
   /// If guard [check] returns `false`, beam to this URI string.
   ///

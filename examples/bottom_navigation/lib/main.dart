@@ -193,7 +193,7 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
       ],
       onTap: (index) => setState(() => widget
           .beamerKey.currentState?.routerDelegate
-          .beamToNamed(index == 0 ? '/books' : 'articles')),
+          .beamToNamed(index == 0 ? '/books' : '/articles')),
     );
   }
 }

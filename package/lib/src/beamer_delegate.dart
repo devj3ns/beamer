@@ -675,7 +675,8 @@ class BeamerDelegate<T extends BeamState> extends RouterDelegate<BeamState>
       state = createState!(beamStateHistory.last);
       redirectLocation = locationBuilder(_state);
     } else if (guard.beamTo != null) {
-      redirectLocation = guard.beamTo!(context);
+      // todo ?!
+      redirectLocation = guard.beamTo!(context, beamStateHistory.last.uri);
     } else if (guard.beamToNamed != null) {
       state = createState!(BeamState.fromUri(Uri.parse(guard.beamToNamed!)));
       redirectLocation = locationBuilder(_state);

@@ -37,19 +37,37 @@ class MyApp extends StatelessWidget {
 
   final routerDelegate = BeamerDelegate(
     guards: [
-      // Guard /logged_in_page by beaming to /login if the user is unauthenticated:
+      // Guard /dashboard and /account by beaming to /login if the user is unauthenticated:
       BeamGuard(
-        pathBlueprints: ['/logged_in_page'],
+        pathBlueprints: ['/dashboard*', '/account*'],
         check: (context, state) =>
             context.select((AuthenticationBloc auth) => auth.isAuthenticated()),
+        beamTo: (context, failedUri) {
+          // Update the queryParameters of the url with the failed uri
+          return BeamerLocations(
+            BeamState(
+              pathBlueprintSegments: ['login'],
+              queryParameters: {'next': failedUri.toString()},
+            ),
+          );
+        },
         beamToNamed: '/login',
       ),
-      // Guard /login by beaming to /logged_in_page if the user is authenticated:
+      // Guard /login by beaming to /dashboard or the failed uri if the user is authenticated:
       BeamGuard(
-        pathBlueprints: ['/login'],
+        pathBlueprints: ['/login*'],
         check: (context, state) => context
             .select((AuthenticationBloc auth) => !auth.isAuthenticated()),
-        beamToNamed: '/logged_in_page',
+        beamTo: (context, _) {
+          final next = context.currentBeamLocation.state.queryParameters['next']
+              ?.replaceAll('/', '');
+
+          return BeamerLocations(
+            BeamState(
+              pathBlueprintSegments: [next ?? 'dashboard'],
+            ),
+          );
+        },
       ),
     ],
     initialPath: '/login',

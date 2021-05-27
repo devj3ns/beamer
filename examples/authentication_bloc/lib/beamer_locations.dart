@@ -1,7 +1,8 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 
-import 'presentation/logged_in_page.dart';
+import 'presentation/account_page.dart';
+import 'presentation/dashboard_page.dart';
 import 'presentation/login_page.dart';
 
 class BeamerLocations extends BeamLocation {
@@ -10,7 +11,8 @@ class BeamerLocations extends BeamLocation {
   @override
   List<String> get pathBlueprints => [
         '/login',
-        '/logged_in_page',
+        '/account',
+        '/dashboard',
       ];
 
   @override
@@ -22,11 +24,17 @@ class BeamerLocations extends BeamLocation {
           title: 'Login',
           child: LoginPage(),
         ),
-      if (state.uri.pathSegments.contains('logged_in_page'))
+      if (state.uri.pathSegments.contains('dashboard'))
         BeamPage(
-          key: ValueKey('show_selection'),
-          title: 'Logged In',
-          child: LoggedInPage(),
+          key: ValueKey('dashboard'),
+          title: 'Dashboard',
+          child: DashboardPage(),
+        ),
+      if (state.uri.pathSegments.contains('account'))
+        BeamPage(
+          key: ValueKey('account'),
+          title: 'Account',
+          child: AccountPage(),
         ),
     ];
   }
